@@ -3,11 +3,10 @@ from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from config import Config
-from flask import request
+
 db = SQLAlchemy()
 migrate = Migrate()
 cors = CORS()
-
 
 def create_app(config_class=Config):
     app = Flask(__name__)
@@ -15,14 +14,13 @@ def create_app(config_class=Config):
     db.init_app(app)
     migrate.init_app(app, db)
     cors.init_app(app)
+
+    from controllers.UserController import user_bp
+    app.register_blueprint(user_bp, url_prefix='/api')
     return app
 
 app = create_app()
-
-@app.route('/reg', methods=['POST'])
-def index():
-    data = request.data
-    return data['user_name']
+from models.user_model import User
 
 
 if __name__ == "__main__":
