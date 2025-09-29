@@ -35,8 +35,12 @@ const Auth = () => {
 
         try{
             const response = await axios.post("http://localhost:8080/api/auth", user_data);
-            if (response.data != '')
+            if (response.data == 'Authorization Success'){
                 localStorage.setItem("user_email", useremail);
+                alert("Вы успешно авторизовались!")
+            }
+            else
+                alert("Неверный логин или пароль");
         }
         catch(e){
             console.log(e);

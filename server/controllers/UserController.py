@@ -27,6 +27,25 @@ def Reg():
 @user_bp.route('/auth', methods=['POST'])
 def Auth():
     data = request.get_json()
+    u_ser = User()
+    users = u_ser.query.all()
+    user_email = data['user_email']
+    user_password = data['user_password']
+    users_list = []
+    for user in users:
+        users_list.append({
+            "user_id": user.user_id,
+            "user_name": user.user_name,
+            "user_email": user.user_email,
+            "user_password": user.user_password,
+            "user_role": user.user_role
+        })
+    for one_user in users_list:
+        if one_user['user_email'] == user_email and bcrypt.checkpw(user_password.encode("utf-8"), one_user['user_password'].encode("utf-8")):
+                return "Authorization Success"
+        else:
+            return "The password is incorrect"
+        
     
 
 @user_bp.route('/users', methods=['GET'])
